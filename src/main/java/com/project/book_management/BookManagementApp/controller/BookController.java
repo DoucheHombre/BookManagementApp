@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.book_management.BookManagementApp.dto.BookDTO;
 import com.project.book_management.BookManagementApp.model.Book;
 import com.project.book_management.BookManagementApp.service.BookService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class BookController {
@@ -28,8 +31,9 @@ public class BookController {
 	}
 
 	@PostMapping("/books")
-	public ResponseEntity<Book> addBooks(@RequestBody Book book) {
-		Book savedbook = bookService.addBook(book);
+	public ResponseEntity<Book> addBooks(@Valid @RequestBody BookDTO bookDTO) {
+		Book savedbook = new Book(bookDTO.getTitle(), bookDTO.getAuthor());
+		bookService.addBook(savedbook);
 		return new ResponseEntity<Book>(savedbook, HttpStatus.CREATED);
 	}
 	// GET /books/{id}
